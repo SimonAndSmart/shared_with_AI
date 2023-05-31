@@ -1,0 +1,263 @@
+                 MRES IN MACHINE LEARNING AND BIG DATA
+                  STATISTICS FOR EXPERIMENTAL PHYSICS
+                       PART II: BAYESIAN STATISTICS
+                       ASSESSED PROBLEM SHEET 1
+                              DUE 1 DEC 2022
+
+                        ALAN HEAVENS. A.HEAVENS@IMPERIAL.AC.UK
+
+
+
+
+                             1. The Monty Hall Problem
+
+Monty Hall hosted a game show called Let’s make a deal.
+You, the contestant, are given the choice of three doors: Behind one door is a car; behind
+the others, a goat. You pick a door, say Door a, and the host, who knows what’s behind the
+doors, opens another door, say Door b, revealing a goat. He then says to you, "Do you want
+to change your choice?" Is it to your advantage to switch?
+Solve this problem using Bayesian reasoning.
+Answer: Let the doors be labelled a, b, c, where a is the door you choose initially, and b is
+the door which is opened. Many, if not all, of the probabilities below should be interpreted
+as ‘given that you have chosen a’, but for clarity we won’t write this explicitly.
+Let p(a) = probability that a leads to the car, etc.
+Let B be the event that door b gets opened and leads to the goat.
+What you want is the probability that a leads to the car, given that b is opened and leads to
+the goat. i.e. the aim is to calculate
+                                          p(a|B).
+We can use Bayes’ theorem for this:
+                                         p(a, B)   p(B|a)p(a)
+                              p(a|B) =           =
+                                          p(B)        p(B)
+Now, clearly p(a) = p(b) = p(c) = 1/3 (all doors are equally likely, before any experiment is
+done).
+p(B|a) = probability that door b is opened, given that a leads to the car. Evidently
+                                                  1
+                                         p(B|a) =   :
+                                                  2
+Alan could have opened either door b or c, since they both lead to the goat.
+
+  Date: 24 November 2022.
+                                               1
+2                          ALAN HEAVENS. A.HEAVENS@IMPERIAL.AC.UK
+
+
+What about p(B)? It is the sum of all the joint probabilities:
+       p(B) = p(B, a) + p(B, b) + p(B, c) = p(B|a)p(a) + p(B|b)p(b) + p(B|c)p(c),
+each of which we can calculate. p(a) = p(b) = p(c) = 1/3, as before, and p(B|a) = 1/2 as
+before. Now
+                                         p(B|b) = 0 :
+Alan will not open b since it leads to the car in this case.
+p(B|c) is the most interesting. Given that you have chosen a (remember this is implicit
+throughout), then if c leads to the car, then Monty Hall must open door b, i.e.
+                                          p(B|c) = 1
+So the probability that your original choice a leads to the car is
+                                              p(B|a)p(a)
+(1)                 p(a|B) =
+                                  p(B|a)p(a) + p(B|b)p(b) + p(B|c)p(c)
+                                                11
+                                                2 3
+                              =    11
+                                              × 13              1
+                                                                    
+                                   23   + 0            + 1×     3
+                                  1
+                              =
+                                  3
+So you would double your chances of winning the car (from 1/3 to 2/3) if you switch to the
+other door.
+
+
+                   2. Estimator for the mean of a distribution
+
+Data {xi }, i = 1, . . . n are drawn independently from gaussian distributions with common
+mean value µ, and known variances σi2 . Show that
+                                                n
+                                                X
+                                         µ̂ =          wi x i
+                                                i=1
+                                                                        Pn
+is an unbiased estimate of µ, for any weights wi which satisfy           i=1 wi   = 1.
+Show that the variance of µ̂ is minimised if
+                                               σ −2
+                                        wi = Pn i −2 .
+                                              i=1 σi
+
+Hint: variances of independent data add, and the variance of ax is a2 times the variance of
+x. Write down the variance of µ̂, σµ̂2 , and minimise it with respect to a particular wk . Note
+that you need to minimise the variance subject to the constraint on the sum of the weights.
+This needs a Lagrange multiplier.
+You may wish to prove that the weighted sum of gaussian-distributed variables is gaussian
+(hint, use the mathematics used for proof of the Central Limit Theorem), but it is not asked
+MRES IN MACHINE LEARNING AND BIG DATASTATISTICS FOR EXPERIMENTAL PHYSICSPART II: BAYESIAN STATISTICSASSESSED
+
+
+for here. Assume it, and hence show that the distribution of the minimum variance estimator
+is
+                                             "             #
+                                                 (µ̂ − µ)2
+                               p(µ̂|µ) ∝ exp −               .
+                                                    2σµ̂2
+
+This is the same formula as given in the lectures for a Bayesian posterior. Discuss the
+differences of interpretation of this formula in the frequentist and Bayesian case.
+Taking the expectation value of µ̂, and noting that hxi i = µ,
+                                 n
+                                 X                  n
+                                                    X                 n
+                                                                      X
+                        hµ̂i =         wi hxi i =         wi µ = µ          wi = µ.
+                                 i=1                i=1               i=1
+
+so µ̂ is an unbiased estimator of µ.
+The variance of µ̂ is (from the rules given)
+                                                    n
+                                                    X
+                                           σµ̂2 =         wi2 σi2 .
+                                                    i=1
+                                               P
+We minimise it, subject to the constraint i wi = 1 (without it, we would just get wi = 0),
+so we introduce a Lagrange multiplier λ and minimise
+                                n              n
+                                                        !
+                               X               X
+                                   wi2 σi2 − λ   wi − 1 .
+                                  i=1                     i=1
+
+Differentiating w.r.t. wk for some arbitrary k and setting to zero, we find
+
+                                           2wk σk2 − λ = 0
+
+Hence wi ∝ σi−2 and the condition that the weights sum to unity gives the result.
+With the weights determined, the variance of the estimator is
+                             n          Pn
+                       2
+                            X
+                                 2 2           σ −4 σ 2       1
+                      σµ̂ =     wi σi = Pi=1 i i2 = Pn          −2 .
+                                            n     −2
+                            i=1             i=1 σi          i=1 σi
+
+Since the expectation value of µ̂ is µ, the minimum variance estimator (you are told it’s
+gaussian) has a distribution
+                                                  "            #
+                                          1          (µ̂ − µ)2
+                             p(µ̂|µ) = √       exp −             .
+                                         2πσµ̂          2σµ̂2
+
+On the right is exactly the same mathematical expression as the Bayesian posterior for µ,
+given a set of data {xi }, for a uniform prior on µ. The interpretation is entirely different
+though. The posterior gives the probability of the parameter µ, from a single (fixed) set
+of data. The frequentist expression is the probability distribution of the estimator µ̂, under
+repeated trials of data drawn from gaussians with the same µ.
+4                             ALAN HEAVENS. A.HEAVENS@IMPERIAL.AC.UK
+
+
+                                  3. The Lighthouse Problem
+
+This problem was set by Steve Gull. It contrasts the Bayesian approach with an estimator-
+based frequentist approach, and is plausibly engineered to make the Bayesian approach look
+good.
+A lighthouse is situated at unknown coordinates (x0 , y0 ) with respect to a straight coastline
+y = 0. It sends a series of N flashes in random directions, and these are recorded on the
+coastline at positions xi ; i = 1 . . . N . Only the positions of the arrivals of the flashes, not
+the directions, nor the intensities, are recorded. Using a Bayesian approach, find the posterior
+distribution of x0 , y0 .
+Now focus only on the unknown x0 . Defining a suitable estimator, x̂, for x0 from the observed
+xi (take the average). Work out the probability distribution for x̂. You may need to refer to
+a proof of the Central Limit Theorem, for the pdf of repeated trials of the same experiment.
+You may also find this useful:
+
+                          Z   ∞
+                                              1
+                              eikx h                    i dx = πy0 eikx0 −|k|y0 .
+                                             (x−x0 )2
+                           −∞       1+         y02
+
+Comment on the mean and variance of the distribution of the estimator.
+You may like to simulate this process, compute the posterior distribution, and also show the
+estimator. But you may not.
+Answer: First, apply Rule 1. We want to know
+                                             p(x0 , y0 |{xi })
+Using Bayes, we write this as
+                                                                        Y
+                  p(x0 , y0 |{xi }) ∝ p({xi }|x0 , y0 )p(x0 , y0 ) ∝            p(xi |x0 , y0 )
+                                                                            i
+
+if we assume a uniform prior for x0 , y0 .
+Let the angle of the direction of the flash to the normal to the coastline be ψ. Then by
+trigonometry, the position that the flash arrives at is given by
+                                           xi − x0
+                                                   = tan ψi .
+                                              y0
+So
+                                                                      dψi
+                                  p(xi |x0 , y0 ) = p(ψi |x0 , y0 )
+                                                                      dxi
+and for signals that are received on the shore, ψ is uniformly distributed in −π/2 < ψ < π/2,
+so p(ψi ) = 1/π in this range, independent of x0 , y0 . Also
+                                                   (xi − x0 )2 dψi
+                                                             
+                               dψi     1                                1
+                       sec2 ψi     =      ⇒ 1+                       =
+                               dxi    y0               y02      dxi     y0
+MRES IN MACHINE LEARNING AND BIG DATASTATISTICS FOR EXPERIMENTAL PHYSICSPART II: BAYESIAN STATISTICSASSESSED
+
+
+and the likelihood of xi is a Cauchy distribution:
+                                                              1
+                             p(xi |x0 , y0 ) =        h                       i.
+                                                              (xi −x0 )2
+                                                 πy0 1 +          y02
+
+Hence the (unnormalised) posterior for x0 , y0 is
+                                                 N
+                                                 Y          1
+                          p(x0 , y0 |{xi }) ∝           h               i,
+                                                             (xi −x0 )2
+                                                 i=1 πy0 1 +     y 2
+                                                                          0
+
+which is our desired outcome.
+Estimator
+A sensible-sounding estimator for x0 is simply the average of the xi :
+                                                    N
+                                                  1 X
+                                        x̂0 =         xi .
+                                                  N
+                                                     i=1
+For large N , one might hope that it gives a precise estimate of x0 . What is its distribution?
+We can use characteristic functions, where the characteristic function Φ(k) for the sum
+(= N x̄0 ) is the product of the individual characteristic functions φ(k), so the characteristic
+function of the sum N x̄0 is
+                                         Φ(k) = φN (k)
+where                        Z ∞
+                                               1
+                     φ(k) =       eikx     h              i dx = eikx0 −|k|y0 .
+                                                 (x−x0 )2
+                              −∞       πy0 1 + y2
+                                                          0
+Hence
+                                    Φ(k) = eiN kx0 −N |k|y0
+which we can invert (by noting that x0 gets replaced by N x0 , and y0 by N y0 ), to get the
+pdf of (N ×) the estimator,
+                                                    1
+                            p(N x̂0 ) =      h                   2
+                                                                   i
+                                                        0 −N x0 )
+                                        πN y0 1 + (N x̂N  2y 2
+                                                                      0
+
+and a simple change of variable gives
+                                                    1
+                                 p(x̂0 ) =      h               2
+                                                                  i
+                                             πy0 1 + (x̂0 −x
+                                                          y2
+                                                             0)
+                                                                  0
+
+so the distribution of the estimator is the same as for any individual xi ! Nothing is to be
+gained by averaging them, and it is no better than having one measurement! This seems to
+violate the CLT, but it does not, since the Cauchy distribution has infinite variance.
+
